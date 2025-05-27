@@ -13,13 +13,13 @@ function BookDetail() {
       .catch(err => console.error("Xəta baş verdi:", err));
   }, [id]);
 
-  if (!book) return <p>Yüklənir...</p>;
+  if (!book) return <p>Loading</p>;
 
   return (
     <div>
       <h2>{book.title}</h2>
-      <p><strong>Müəllif:</strong> {book.author}</p>
-      <p><strong>Açıqlama:</strong> {book.description}</p>
+      <p><strong>Author</strong> {book.author}</p>
+      <p><strong>Description:</strong> {book.description}</p>
       <button onClick={() => navigate(-1)}>Back</button>
     </div>
   );
