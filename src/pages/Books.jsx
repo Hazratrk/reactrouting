@@ -1,58 +1,34 @@
-import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
-const Books = () => {
-  const [books, setBooks] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+function Books() {
+  const [books, setBooks] = useState([]);
 
   useEffect(() => {
-    const fetchBooks = async () => {
-      try {
-        const response = await fetch('https://book-store-api-liard-three.vercel.app/books')
-        if (!response.ok) {
-          throw new Error('Network response was not ok')
-        }
-        const data = await response.json()
-        setBooks(data)
-      } catch (err) {
-        setError(err.message)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchBooks()
-  }, [])
-
-  if (loading) return <div>Loading...</div>
-  if (error) return <div>Error: {error}</div>
+    fetch("https://book-store-api-liard-three.vercel.app/books")
+      .then(res => res.json())
+      .then(data => setBooks(data))
+      .catch(err => console.error("Xəta baş verdi:", err));
+  }, []);
 
   return (
-    <div className="books">
-      <h1>Kitablar</h1>
-      <table>
-        <thead>
-          <tr>
-            <th>Book Name</th>
-            <th>Author</th>
-            <th>More</th>
-          </tr>
-        </thead>
-        <tbody>
-          {books.map((book) => (
-            <tr key={book.id}>
-              <td>{book.title}</td>
-              <td>{book.author}</td>
-              <td>
-                <Link to={`/books/${book.id}`}>More</Link>
-              </td>
-            </tr>
+    <div>
+      <h2>Book List</h2>
+      {books.length === 0 ? (
+        <p>Loading</p>
+      ) : (
+        <ul>
+          {books.map(book => (
+            <li key={book.id} style={{ marginBottom: "10px" }}>
+              <strong>{book.title}</strong> - {book.author}
+              <br />
+              <Link to={`/books/${book.id}`}>More</Link>
+            </li>
           ))}
-        </tbody>
-      </table>
+        </ul>
+      )}
     </div>
-  )
+  );
 }
 
-export default Books
+export default Books;

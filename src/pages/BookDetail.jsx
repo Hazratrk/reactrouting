@@ -1,45 +1,28 @@
-import { useState, useEffect } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 
-const BookDetail = () => {
-  const { id } = useParams()
-  const [book, setBook] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+function BookDetail() {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [book, setBook] = useState(null);
 
   useEffect(() => {
-    const fetchBook = async () => {
-      try {
-        const response = await fetch(`https://book-store-api-liard-three.vercel.app/books/${id}`)
-        if (!response.ok) {
-          throw new Error('Network response was not ok')
-        }
-        const data = await response.json()
-        setBook(data)
-      } catch (err) {
-        setError(err.message)
-      } finally {
-        setLoading(false)
-      }
-    }
+    fetch(`https://book-store-api-liard-three.vercel.app/books/${id}`)
+      .then(res => res.json())
+      .then(data => setBook(data))
+      .catch(err => console.error("Xəta baş verdi:", err));
+  }, [id]);
 
-    fetchBook()
-  }, [id])
-
-  if (loading) return <div>Loading...</div>
-  if (error) return <div>Error: {error}</div>
-  if (!book) return <div>Book not find</div>
+  if (!book) return <p>Yüklənir...</p>;
 
   return (
-    <div className="book-detail">
-      <h1>{book.title}</h1>
-      <h2>{book.author}</h2>
-      <p>{book.description}</p>
-      <Link to="/books" className="back-button">
-        Geri qayıt
-      </Link>
+    <div>
+      <h2>{book.title}</h2>
+      <p><strong>Müəllif:</strong> {book.author}</p>
+      <p><strong>Açıqlama:</strong> {book.description}</p>
+      <button onClick={() => navigate(-1)}>Back</button>
     </div>
-  )
+  );
 }
 
-export default BookDetail
+export default BookDetail;

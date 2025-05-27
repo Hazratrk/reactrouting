@@ -1,12 +1,12 @@
-const About = () => {
+import React from "react";
+
+function About() {
   return (
-    <div className="about">
-      <h1>About</h1>
-      <p>
-       Welcome To Book Expoler
-      </p>
+    <div>
+      <h2>About</h2>
+      <p>Different  Books</p>
     </div>
-  )
+  );
 }
 
-export default About
+export default About;
